@@ -3,6 +3,14 @@ git init --bare $HOME/.dotfiles
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 dotfiles config --local status.showUntrackedFiles no
 
+```bash
+git init --bare $HOME/.dotfiles
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dotfiles add ~/.zshrc
+dotfiles commit -m "Initial dotfiles"
+```
+
+
 # Add your config files
 dotfiles add ~/.config/kitty/kitty.conf
 dotfiles add ~/.config/starship.toml
@@ -20,3 +28,14 @@ dotfiles checkout
 
 
 echo "alias dotfiles='git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME'" >> ~/.zshrc%                                                                                    
+```bash
+git init --bare $HOME/.dotfiles
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dotfiles add ~/.zshrc
+dotfiles commit -m "Initial dotfiles"
+``````bash
+git init --bare $HOME/.dotfiles
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dotfiles add ~/.zshrc
+dotfiles commit -m "Initial dotfiles"
+```
