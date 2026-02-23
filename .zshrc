@@ -74,6 +74,7 @@ DISABLE_UPDATE_PROMPT="false"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git
 	 zsh-autosuggestions
+	 ssh-agent
 )
 
 source $ZSH/oh-my-zsh.sh
