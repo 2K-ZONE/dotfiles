@@ -12,15 +12,16 @@ dotfiles add ~/.config/kitty/kitty.conf
 dotfiles add ~/.config/starship.toml
 dotfiles add ~/.config/zellij/config.kdl
 dotfiles commit -m "Add config files"
-dotfiles remote add origin git@github.com:yourusername/dotfiles.git
+dotfiles remote add origin git@github.com:2K-ZONE/dotfiles.git
 dotfiles push -u origin main
 ```
 
 # On a new machine — clone and restore
 ```bash
-git clone --bare git@github.com:yourusername/dotfiles.git $HOME/.dotfiles
+git clone --bare https://github.com/2K-ZONE/dotfiles.git $HOME/.dotfiles
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 dotfiles checkout
+dotfiles config --local status.showUntrackedFiles no
 ```
 
 ```bash
