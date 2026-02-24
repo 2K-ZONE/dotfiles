@@ -79,6 +79,14 @@ plugins=(git
 
 source $ZSH/oh-my-zsh.sh
 
+# Add all private keys in ~/.ssh
+for key in ~/.ssh/id_*; do
+    # Only add files that are private keys (exclude .pub)
+    if [[ -f $key && $key != *.pub ]]; then
+        ssh-add "$key" >/dev/null 2>&1
+    fi
+done
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
