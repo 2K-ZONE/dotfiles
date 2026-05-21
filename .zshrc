@@ -83,7 +83,8 @@ source $ZSH/oh-my-zsh.sh
 for key in ~/.ssh/id_*(N); do
     # Only add files that are private keys (exclude .pub)
     if [[ -f $key && $key != *.pub ]]; then
-        ssh-add "$key" >/dev/null 2>&1
+        # ssh-add "$key" >/dev/null 2>&1
+        ssh-add "$key"
     fi
 done
 
@@ -116,5 +117,6 @@ done
 
 # ---- STARSHIP PROMPT ----
 # Initialize Starship
+STARSHIP_CONFIG=${HOME}/.config/starship.toml
 eval "$(starship init zsh)"
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
