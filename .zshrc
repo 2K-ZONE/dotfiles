@@ -67,6 +67,13 @@ DISABLE_UPDATE_PROMPT="false"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+
+
+
+
+zstyle :omz:plugins:ssh-agent identities id_ed25519 id_rsa.MELITTA_BBB
+
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -78,15 +85,6 @@ plugins=(git
 )
 
 source $ZSH/oh-my-zsh.sh
-
-# Add all private keys in ~/.ssh
-for key in ~/.ssh/id_*(N); do
-    # Only add files that are private keys (exclude .pub)
-    if [[ -f $key && $key != *.pub ]]; then
-        # ssh-add "$key" >/dev/null 2>&1
-        ssh-add "$key"
-    fi
-done
 
 # User configuration
 
