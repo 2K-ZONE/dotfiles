@@ -67,11 +67,17 @@ DISABLE_UPDATE_PROMPT="false"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+typeset -a ssh_keys
 
+for key in \
+    id_ed25519 \
+    id_rsa.MELITTA_BBB
+do
+    [[ -f ~/.ssh/$key ]] && ssh_keys+=($key)
+done
 
-
-
-zstyle :omz:plugins:ssh-agent identities id_ed25519 id_rsa.MELITTA_BBB
+zstyle :omz:plugins:ssh-agent identities $ssh_keys
+# KLETSCHKE 2026-07-29 zstyle :omz:plugins:ssh-agent identities id_ed25519 id_rsa.MELITTA_BBB
 
 
 # Which plugins would you like to load?
