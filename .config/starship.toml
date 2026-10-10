@@ -58,10 +58,6 @@ vimcmd_symbol = "[❮](green)"
 format = "[$duration]($style) "
 style = "yellow"
 
-#[directory]
-#style = "blue"
-#format = " [$path]($style)[$read_only]($read_only_style) "
-
 [directory]
 style = "blue"
 format = "[$path]($style)[$read_only]($read_only_style) "
@@ -74,7 +70,6 @@ style = "italic bright-black"
 
 [git_metrics]
 disabled = false
-#format = "([+$added]($added_style)( ))([-$deleted]($deleted_style) )"
 format = "([+$added]($added_style) )([-$deleted]($deleted_style) )"
 added_style = "italic green"
 deleted_style = "italic red"
@@ -83,10 +78,6 @@ deleted_style = "italic red"
 style = "bright-black"
 
 [git_status]
-#format = "[[( *$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)[|](bold overlay1) "
-#format = "[[( *$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)[|](bold overlay1) "
-#format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218)( $ahead_behind$stashed)]($style)[|](bold overlay1) "
-# NOT BAD format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted )](218)( $ahead_behind$stashed)]($style)[|](bold overlay1) "
 format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted )](218)($ahead_behind )($stashed)]($style)[|](bold overlay1) "
 style = "cyan"
 conflicted = "​"
@@ -97,22 +88,10 @@ renamed = "​"
 deleted = "​"
 stashed = "≡ "
 
-#[custom.mascot]
-#command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
-#when = "true"
-#format = "[$output ]($style)"
-
 [custom.mascot_linux]
 command = "shuf -n1 -e 🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔"
 when = "true"
 format = "[$output](bold)"
-
-
-#[custom.mascot_linux]
-#when = "true"
-#command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
-#format = "[$output ]($style)"
-#os = "linux"
 
 [custom.mascot_macos]
 when = "true"
@@ -121,88 +100,17 @@ format = "[$output ]($style)"
 os = "macos"
 
 [custom.mascot_windows]
-when = true
+when = "true"
 command = "$a = @('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"
 shell = ["powershell", "-NoProfile", "-Command"]
 format = "[$output ]($style)"
 os = "windows"
 
-
-
-
-[custom.hello_win]
-when = true
-command = "Write-Output HELLO"
-shell = ["powershell.exe", "-NoProfile", "-Command"]
-format = "[$output]($style) "
-os = "windows"
-
-[custom.os_check]
-when = true
-command = "Write-Output 'I am Windows'"
-shell = ["powershell.exe", "-NoProfile", "-Command"]
-format = "[$output]($style) "
-# No os filter — should always run
-
-
 [custom.test_cmd]
 when = true
 command = "echo HELLO_FROM_CMD"
 format = "[$output]($style) "
-[custom.test_pwsh]
-when = true
-command = "Write-Output HELLO_FROM_PWSH"
-shell = ["pwsh", "-NoProfile", "-Command"]
-format = "[$output]($style) "
-[custom.test_ps_noext]
-when = true
-command = "Write-Output HELLO"
-shell = ["powershell", "-NoProfile", "-Command"]
-format = "[$output]($style) "
-[custom.test_ps_nologo]
-when = true
-command = "Write-Output HELLO"
-shell = ["powershell.exe", "-NoLogo", "-NonInteractive", "-Command"]
-format = "[$output]($style) "
-[custom.test_ps_full]
-when = true
-command = "Write-Output HELLO"
-shell = ['C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe', '-Command']
-format = "[$output]($style) "
-[custom.test_ps_sb]
-when = true
-command = "& { Write-Output HELLO }"
-shell = ["powershell.exe", "-NoProfile", "-Command"]
-format = "[$output]($style) "
-[custom.mascot_windows2]
-when = true
-command = "& { $a=@('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random }"
-shell = ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command"]
-format = "[$output ]($style)"
 os = "windows"
-
-[custom.mascot_windows3]
-when = true
-command = '''powershell -NoProfile -Command "$a=@('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"'''
-format = "[$output ]($style)"
-os = "windows"
-[custom.mascot_windows4]
-when = true
-command = '''powershell -NoProfile -Command "$a=@('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"'''
-format = "[$output ]($style)"
-os = "windows"
-
-
-
-
-
-
-
-
-#[hostname]
-#ssh_symbol = "@"
-#format = "[($ssh_symbol$hostname)]($style)( )"
-#style = "bold peach"
 
 [hostname]
 ssh_symbol = "@"
