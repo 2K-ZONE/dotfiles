@@ -97,29 +97,22 @@ renamed = "​"
 deleted = "​"
 stashed = "≡ "
 
-[custom.mascot]
-command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
-when = "true"
-format = "[$output ]($style)"
-
-
-
-
-
-
-
-
-
-
-
-
-
+#[custom.mascot]
+#command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
+#when = "true"
+#format = "[$output ]($style)"
 
 [custom.mascot_linux]
+command = "shuf -n1 -e 🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔"
 when = "true"
-command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
-format = "[$output ]($style)"
-os = "linux"
+format = "[$output](bold)"
+
+
+#[custom.mascot_linux]
+#when = "true"
+#command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
+#format = "[$output ]($style)"
+#os = "linux"
 
 [custom.mascot_macos]
 when = "true"
@@ -128,7 +121,7 @@ format = "[$output ]($style)"
 os = "macos"
 
 [custom.mascot_windows]
-when = "true"
+when = true
 command = "$a = @('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"
 shell = ["powershell", "-NoProfile", "-Command"]
 format = "[$output ]($style)"
@@ -137,7 +130,19 @@ os = "windows"
 
 
 
+[custom.hello_win]
+when = true
+command = "Write-Output HELLO"
+shell = ["powershell.exe", "-NoProfile", "-Command"]
+format = "[$output]($style) "
+os = "windows"
 
+[custom.os_check]
+when = true
+command = "Write-Output 'I am Windows'"
+shell = ["powershell.exe", "-NoProfile", "-Command"]
+format = "[$output]($style) "
+# No os filter — should always run
 
 
 
