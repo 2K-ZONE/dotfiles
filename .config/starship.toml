@@ -102,6 +102,53 @@ command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 
 when = "true"
 format = "[$output ]($style)"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+[custom.mascot_linux]
+when = "true"
+command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
+format = "[$output ]($style)"
+os = "linux"
+
+[custom.mascot_macos]
+when = "true"
+command = '''awk 'BEGIN{srand(); split("🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔",a," "); print a[int(rand()*10)+1]}' '''
+format = "[$output ]($style)"
+os = "macos"
+
+[custom.mascot_windows]
+when = "true"
+command = "$a = @('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"
+shell = ["powershell", "-NoProfile", "-Command"]
+format = "[$output ]($style)"
+os = "windows"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #[hostname]
 #ssh_symbol = "@"
 #format = "[($ssh_symbol$hostname)]($style)( )"
