@@ -145,6 +145,10 @@ format = "[$output]($style) "
 # No os filter — should always run
 
 
+[custom.test_cmd]
+when = true
+command = "echo HELLO_FROM_CMD"
+format = "[$output]($style) "
 
 
 
