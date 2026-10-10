@@ -149,7 +149,37 @@ format = "[$output]($style) "
 when = true
 command = "echo HELLO_FROM_CMD"
 format = "[$output]($style) "
-
+[custom.test_pwsh]
+when = true
+command = "Write-Output HELLO_FROM_PWSH"
+shell = ["pwsh", "-NoProfile", "-Command"]
+format = "[$output]($style) "
+[custom.test_ps_noext]
+when = true
+command = "Write-Output HELLO"
+shell = ["powershell", "-NoProfile", "-Command"]
+format = "[$output]($style) "
+[custom.test_ps_nologo]
+when = true
+command = "Write-Output HELLO"
+shell = ["powershell.exe", "-NoLogo", "-NonInteractive", "-Command"]
+format = "[$output]($style) "
+[custom.test_ps_full]
+when = true
+command = "Write-Output HELLO"
+shell = ['C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe', '-Command']
+format = "[$output]($style) "
+[custom.test_ps_sb]
+when = true
+command = "& { Write-Output HELLO }"
+shell = ["powershell.exe", "-NoProfile", "-Command"]
+format = "[$output]($style) "
+[custom.mascot_windows2]
+when = true
+command = "& { $a=@('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random }"
+shell = ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command"]
+format = "[$output ]($style)"
+os = "windows"
 
 
 
