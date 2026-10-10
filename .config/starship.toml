@@ -181,6 +181,17 @@ shell = ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command"]
 format = "[$output ]($style)"
 os = "windows"
 
+[custom.mascot_windows3]
+when = true
+command = '''powershell -NoProfile -Command "$a=@('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"'''
+format = "[$output ]($style)"
+os = "windows"
+[custom.mascot_windows4]
+when = true
+command = '''powershell -NoProfile -Command "$a=@('🐧','🦀','🐙','🦊','🐢','🦉','🐱','🐺','🦝','🦔'); $a | Get-Random"'''
+format = "[$output ]($style)"
+os = "windows"
+
 
 
 
