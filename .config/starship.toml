@@ -97,7 +97,7 @@ stashed = "≡ "
 [custom.mascot_linux]
 command = "shuf -n1 -e 🐧 🦀 🐙 🦊 🐢 🦉 🐱 🐺 🦝 🦔"
 when = "true"
-format = "[$output](bold)"
+format = "[$output ](bold)"
 
 [custom.mascot_macos]
 when = "true"
