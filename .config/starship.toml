@@ -69,7 +69,7 @@ os = "windows"
 [directory]
 #style = "bg:peach fg:crust"
 style = "sapphire"
-format = "[ $path ]($style)"
+format = "[$path ]($style)"
 truncation_symbol = "…/"
 
 [directory.substitutions]
