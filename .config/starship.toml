@@ -106,7 +106,7 @@ diverged      = "⇕⇡${ahead_count}⇣${behind_count}"
 
 [hostname]
 ssh_symbol = "@"
-format = "[($ssh_symbol$hostname )]($style)"
+format = "([$ssh_symbol](bright-black)[$hostname ]($style))"
 style = "bold peach"
 
 [os]
