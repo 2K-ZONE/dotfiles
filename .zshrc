@@ -67,18 +67,17 @@ DISABLE_UPDATE_PROMPT="false"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-typeset -a ssh_keys
-
-for key in \
-    id_ed25519 \
-    id_rsa.MELITTA_BBB
-do
-    [[ -f ~/.ssh/$key ]] && ssh_keys+=($key)
-done
-
-zstyle :omz:plugins:ssh-agent identities $ssh_keys
-# KLETSCHKE 2026-07-29 zstyle :omz:plugins:ssh-agent identities id_ed25519 id_rsa.MELITTA_BBB
-
+# Add every private key in ~/.ssh to the agent (detected by its PEM header)
+() {
+    local f first
+    local -a ssh_keys
+    for f in ~/.ssh/*(.N); do
+        IFS= read -r first < $f 2>/dev/null || continue
+        [[ $first == '-----BEGIN '*'PRIVATE KEY-----' ]] && ssh_keys+=(${f:t})
+    done
+    zstyle :omz:plugins:ssh-agent identities $ssh_keys
+    zstyle :omz:plugins:ssh-agent lifetime 16h
+}
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
