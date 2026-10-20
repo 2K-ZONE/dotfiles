@@ -3,7 +3,7 @@
 # Reference: https://starship.rs/config/
 
 "$schema" = "https://starship.rs/config-schema.json"
-format = "$os$username$hostname$directory($git_branch$git_commit$git_state$git_metrics$git_status) $cmd_duration$java$python$character"
+format = "$os($username$hostname )$directory($git_branch$git_commit$git_state$git_metrics$git_status) $cmd_duration$java$python$character"
 add_newline = false
 palette = "catppuccin_latte"
 command_timeout = 1000
@@ -94,7 +94,7 @@ diverged      = "⇕⇡${ahead_count}⇣${behind_count}"
 
 [hostname]
 ssh_symbol = "@"
-format = "([$ssh_symbol](bright-black)[$hostname ]($style))"
+format = "([$ssh_symbol](bright-black)[$hostname]($style))"
 style = "bold peach"
 
 [os]
