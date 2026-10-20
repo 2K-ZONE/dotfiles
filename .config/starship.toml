@@ -106,5 +106,8 @@ detect_extensions = [ "py", "pyw", "pyi", "ipynb" ]
 detect_files = [ "requirements.txt", "pyproject.toml", "pyvenv.cfg", "setup.py", "tox.ini", "Pipfile" ]
 detect_folders = [ ".venv", "venv" ]
 
+[java]
+format = "[$symbol([$version](bold dimmed red) )]($style)"
+
 [username]
 format = "[$user]($style)"
