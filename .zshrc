@@ -87,6 +87,8 @@ DISABLE_UPDATE_PROMPT="false"
 plugins=(git
 	 zsh-autosuggestions
 	 ssh-agent
+	 sudo
+	 zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
