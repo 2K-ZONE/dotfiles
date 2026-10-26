@@ -128,3 +128,8 @@ STARSHIP_CONFIG=${HOME}/.config/starship.toml
 eval "$(starship init zsh)"
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias ip="ip -c"
+alias da="dotfiles add"
+alias dp="dotfiles push"
+alias dl="dotfiles pull"
+alias ds="dotfiles status"
+alias dcmsg="dotfiles commit -m"
