@@ -15,7 +15,7 @@ ZSH_THEME="robbyrussell"
 
 zstyle ':omz:update' mode auto
 
-# Disable path underlining in zsh-syntax-highlighting
+typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]='none'
 
 # Set list of themes to pick from when loading at random
