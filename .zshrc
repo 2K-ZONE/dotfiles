@@ -125,6 +125,12 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #
 
+# ---- STARSHIP / ZELLIJ UPDATES ----
+# Weekly release check, like omz auto update (mode: prompt | auto | disabled)
+zstyle ':tool-update' mode prompt
+zstyle ':tool-update' frequency 7
+source ${HOME}/.config/zsh/tool-update.zsh
+
 # ---- STARSHIP PROMPT ----
 # Initialize Starship
 STARSHIP_CONFIG=${HOME}/.config/starship.toml
