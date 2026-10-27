@@ -134,7 +134,7 @@ source ${HOME}/.config/zsh/tool-update.zsh
 # ---- STARSHIP PROMPT ----
 # Initialize Starship
 STARSHIP_CONFIG=${HOME}/.config/starship.toml
-eval "$(starship init zsh)"
+(( $+commands[starship] )) && eval "$(starship init zsh)"
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias ip="ip -c"
 alias da="dotfiles add"

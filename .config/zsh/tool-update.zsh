@@ -3,7 +3,9 @@
 # Settings (set before sourcing):
 #   zstyle ':tool-update' mode prompt     # prompt | auto | disabled
 #   zstyle ':tool-update' frequency 7     # days between checks
-# Run `tool-update` to check right now.
+#   zstyle ':tool-update' bindir /usr/local/bin   # where missing tools go
+# Missing tools are offered for installation. Run `tool-update` to check
+# right now.
 
 autoload -Uz is-at-least
 
@@ -26,12 +28,13 @@ _tool_update_priv() {
 }
 
 _tool_update_starship() {
-    local bindir=${commands[starship]:h}
-    curl -fsSL --max-time 30 https://starship.rs/install.sh | sh -s -- -y -b $bindir
+    local bindir=$2
+    # The installer's stdout is mostly shell setup hints; errors go to stderr.
+    curl -fsSL --max-time 30 https://starship.rs/install.sh | sh -s -- -y -b $bindir >/dev/null
 }
 
 _tool_update_zellij() {
-    local version=$1 bindir=${commands[zellij]:h} arch os tmp want have
+    local version=$1 bindir=$2 arch os tmp want have
     case $(uname -m) in
         x86_64|amd64)  arch=x86_64 ;;
         arm64|aarch64) arch=aarch64 ;;
@@ -69,31 +72,43 @@ _tool_update_zellij() {
 }
 
 tool-update() {
-    local mode=$1 name repo current latest
+    local mode=$1 name repo current latest bindir action
     [[ -n $mode ]] || zstyle -s ':tool-update' mode mode || mode=prompt
 
     for name repo in starship starship/starship zellij zellij-org/zellij; do
-        (( $+commands[$name] )) || continue
-        current=${${(z)"$($name --version 2>/dev/null)"}[2]}
+        if (( $+commands[$name] )); then
+            bindir=${commands[$name]:h}
+            current=${${(z)"$($name --version 2>/dev/null)"}[2]}
+        else
+            zstyle -s ':tool-update' bindir bindir || bindir=/usr/local/bin
+            current=
+        fi
+
         latest=$(_tool_update_latest $repo) || {
             print -u2 "[$name] could not determine latest release"
             continue
         }
-        is-at-least $latest $current && continue
+        [[ -n $current ]] && is-at-least $latest $current && continue
 
+        if [[ -n $current ]]; then
+            action="Update available: $current -> $latest. Update now?"
+        else
+            action="Not installed. Install $latest to $bindir?"
+        fi
         if [[ $mode == prompt ]]; then
-            print -n "[$name] Update available: $current -> $latest. Update now? [Y/n] "
+            print -n "[$name] $action [Y/n] "
             read -r -k 1 REPLY
             [[ $REPLY == $'\n' ]] || print
             [[ $REPLY == [nN] ]] && continue
         else
-            print "[$name] Updating $current -> $latest"
+            print "[$name] Installing $latest to $bindir"
         fi
 
-        if _tool_update_$name $latest; then
-            print "[$name] Updated to $latest"
+        if _tool_update_$name $latest $bindir; then
+            rehash
+            print "[$name] Installed $latest"
         else
-            print -u2 "[$name] Update failed"
+            print -u2 "[$name] Installation failed"
         fi
     done
 }
