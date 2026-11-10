@@ -150,6 +150,7 @@ alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 alias ip="ip -c"
 
+
 alias dadd="dotfiles add"
 alias dpush="dotfiles push"
 alias dpull="dotfiles pull"
