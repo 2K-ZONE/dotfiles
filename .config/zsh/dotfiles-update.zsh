@@ -17,12 +17,26 @@ dotfiles-update() {
     [[ -n $mode ]] || zstyle -s ':dotfiles-update' mode mode || mode=prompt
     [[ -d $HOME/.dotfiles ]] || return 0
 
+    # A bare clone has no fetch refspec, so fetch would create no origin/*.
+    _dotfiles_git config --get remote.origin.fetch >/dev/null ||
+        _dotfiles_git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+
     # BatchMode: never hang the shell start-up on a passphrase or host key prompt.
     GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=5" \
         _dotfiles_git fetch --quiet 2>/dev/null || {
         print -u2 "[dotfiles] fetch failed, skipping"
         return 1
     }
+
+    # ...and its branch has no upstream either.
+    if ! _dotfiles_git rev-parse -q --verify @{upstream} >/dev/null 2>&1; then
+        local branch=$(_dotfiles_git symbolic-ref -q --short HEAD)
+        _dotfiles_git branch -q -u origin/$branch $branch 2>/dev/null || {
+            print -u2 "[dotfiles] no upstream for '$branch', skipping"
+            return 1
+        }
+        print "[dotfiles] Set upstream of '$branch' to origin/$branch"
+    fi
 
     behind=$(_dotfiles_git rev-list --count HEAD..@{upstream} 2>/dev/null) || return 1
     ahead=$(_dotfiles_git rev-list --count @{upstream}..HEAD 2>/dev/null) || return 1
