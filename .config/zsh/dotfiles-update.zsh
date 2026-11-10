@@ -48,7 +48,6 @@ dotfiles-update() {
     fi
 
     if [[ $mode == prompt ]]; then
-        _dotfiles_git log --oneline HEAD..@{upstream}
         print -n "[dotfiles] $behind new commit(s). Pull now? [Y/n] "
         read -r -k 1 REPLY
         [[ $REPLY == $'\n' ]] || print
@@ -57,7 +56,11 @@ dotfiles-update() {
         print "[dotfiles] Pulling $behind new commit(s)"
     fi
 
+    local old=$(_dotfiles_git rev-parse HEAD)
     if _dotfiles_git pull --ff-only --quiet; then
+        # Like omz after an update: what came in, without a pager.
+        _dotfiles_git --no-pager log --oneline $old..HEAD
+        _dotfiles_git --no-pager diff --stat $old HEAD
         print "[dotfiles] Updated, run 'exec zsh' to load changed shell config"
     else
         print -u2 "[dotfiles] Pull failed"
