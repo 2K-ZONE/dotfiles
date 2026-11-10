@@ -145,8 +145,11 @@ source ${HOME}/.config/zsh/dotfiles-update.zsh
 # Initialize Starship
 STARSHIP_CONFIG=${HOME}/.config/starship.toml
 (( $+commands[starship] )) && eval "$(starship init zsh)"
+
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+
 alias ip="ip -c"
+
 alias dadd="dotfiles add"
 alias dpush="dotfiles push"
 alias dpull="dotfiles pull"
