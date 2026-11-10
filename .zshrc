@@ -13,6 +13,10 @@ export ZSH="$HOME/.oh-my-zsh"
 # KONSTI 2020-09-08 ZSH_THEME="robbyrussell"
 ZSH_THEME="robbyrussell"
 
+HISTSIZE=1000000
+SAVEHIST=1000000
+setopt EXTENDED_HISTORY HIST_IGNORE_DUPS
+
 zstyle ':omz:update' mode auto
 
 typeset -gA ZSH_HIGHLIGHT_STYLES
@@ -130,6 +134,12 @@ source $ZSH/oh-my-zsh.sh
 zstyle ':tool-update' mode prompt
 zstyle ':tool-update' frequency 7
 source ${HOME}/.config/zsh/tool-update.zsh
+
+# ---- DOTFILES UPDATES ----
+# Weekly `dotfiles pull` (fast-forward only), mode: prompt | auto | disabled
+zstyle ':dotfiles-update' mode prompt
+zstyle ':dotfiles-update' frequency 7
+source ${HOME}/.config/zsh/dotfiles-update.zsh
 
 # ---- STARSHIP PROMPT ----
 # Initialize Starship
