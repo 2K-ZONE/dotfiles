@@ -4,8 +4,13 @@
 #   zstyle ':tool-update' mode prompt     # prompt | auto | disabled
 #   zstyle ':tool-update' frequency 7     # days between checks
 #   zstyle ':tool-update' bindir /usr/local/bin   # where missing tools go
-# Missing tools are offered for installation. Run `tool-update` to check
-# right now.
+#   zstyle ':tool-update' manual-mode auto  # auto | prompt, for `tool-update`
+# Missing tools are offered for installation.
+#
+# Manual use, like `omz update`:
+#   tool-update            update as set by manual-mode (default: no asking)
+#   tool-update --check    only report available updates
+#   tool-update --prompt   ask before each update
 
 autoload -Uz is-at-least
 
@@ -71,9 +76,9 @@ _tool_update_zellij() {
     }
 }
 
-tool-update() {
-    local mode=$1 name repo current latest bindir action
-    [[ -n $mode ]] || zstyle -s ':tool-update' mode mode || mode=prompt
+# $1: prompt | auto | check, $2: set to report tools that are up to date.
+_tool_update_run() {
+    local mode=$1 verbose=$2 name repo current latest bindir action
 
     for name repo in starship starship/starship zellij zellij-org/zellij; do
         if (( $+commands[$name] )); then
@@ -88,7 +93,15 @@ tool-update() {
             print -u2 "[$name] could not determine latest release"
             continue
         }
-        [[ -n $current ]] && is-at-least $latest $current && continue
+        if [[ -n $current ]] && is-at-least $latest $current; then
+            [[ -n $verbose ]] && print "[$name] $current is up to date"
+            continue
+        fi
+
+        if [[ $mode == check ]]; then
+            print "[$name] ${current:-not installed} -> $latest available"
+            continue
+        fi
 
         if [[ -n $current ]]; then
             action="Update available: $current -> $latest. Update now?"
@@ -113,6 +126,30 @@ tool-update() {
     done
 }
 
+tool-update() {
+    local mode
+    case $1 in
+        '')          zstyle -s ':tool-update' manual-mode mode || mode=auto ;;
+        -c|--check)  mode=check ;;
+        -p|--prompt) mode=prompt ;;
+        -y|--yes)    mode=auto ;;
+        -h|--help)
+            print "usage: tool-update [--check|--prompt|--yes]"
+            return ;;
+        *)
+            print -u2 "tool-update: unknown option $1"
+            return 1 ;;
+    esac
+
+    # A manual run restarts the periodic check interval, as omz update does.
+    if [[ $mode != check ]]; then
+        zmodload -F zsh/datetime p:EPOCHSECONDS
+        mkdir -p ${_tool_update_stamp:h}
+        print $EPOCHSECONDS > $_tool_update_stamp
+    fi
+    _tool_update_run $mode 1
+}
+
 # Weekly check on interactive shell start-up.
 () {
     local mode days
@@ -128,5 +165,5 @@ tool-update() {
     # Write the stamp first so parallel shells don't all check at once.
     mkdir -p ${_tool_update_stamp:h}
     print $EPOCHSECONDS > $_tool_update_stamp
-    tool-update $mode
+    _tool_update_run $mode
 }

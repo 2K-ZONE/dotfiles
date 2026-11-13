@@ -22,6 +22,15 @@ zstyle ':omz:update' mode auto
 typeset -gA ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]='none'
 
+# Weekly release check at shell start, like omz auto update.
+# mode: prompt = ask before updating, auto = update without asking, disabled = no check
+zstyle ':tool-update' mode prompt
+zstyle ':tool-update' frequency 7
+# Manual `tool-update`: auto = update without asking, prompt = ask first.
+# One-off override: `tool-update --prompt` / `tool-update --yes`.
+zstyle ':tool-update' manual-mode auto
+
+
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -40,7 +49,6 @@ ZSH_HIGHLIGHT_STYLES[path]='none'
 
 # Uncomment the following line to automatically update without prompting.
 # DISABLE_UPDATE_PROMPT="true"
-DISABLE_UPDATE_PROMPT="false"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -130,9 +138,13 @@ source $ZSH/oh-my-zsh.sh
 #
 
 # ---- STARSHIP / ZELLIJ UPDATES ----
-# Weekly release check, like omz auto update (mode: prompt | auto | disabled)
+# Weekly release check at shell start, like omz auto update.
+# mode: prompt = ask before updating, auto = update without asking, disabled = no check
 zstyle ':tool-update' mode prompt
 zstyle ':tool-update' frequency 7
+# Manual `tool-update`: auto = update without asking, prompt = ask first.
+# One-off override: `tool-update --prompt` / `tool-update --yes`.
+zstyle ':tool-update' manual-mode auto
 source ${HOME}/.config/zsh/tool-update.zsh
 
 # ---- DOTFILES UPDATES ----
