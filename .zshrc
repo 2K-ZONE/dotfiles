@@ -165,13 +165,18 @@ if [[ "$(uname -s)" == "Darwin" && "$(hostname -s)" == "hephaistos" ]]; then
     export PATH="$MAVEN_HOME/bin:$PATH"
 fi
 
-alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+_dotgit="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
+alias dotfiles="$_dotgit"
 
 alias ip="ip -c"
 
-alias dadd="dotfiles add"
-alias dpush="dotfiles push"
-alias dpull="dotfiles pull"
-alias dstatus="dotfiles status"
-alias dcomm="dotfiles commit -m"
-alias ddiff="dotfiles diff"
+alias dadd="$_dotgit add"
+alias dpush="$_dotgit push"
+alias dpull="$_dotgit pull"
+alias dstatus="$_dotgit status"
+alias dcomm="$_dotgit commit -m"
+alias ddiff="$_dotgit diff"
+
+
+alias ip="ip -c"
+
