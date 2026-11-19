@@ -158,6 +158,13 @@ source ${HOME}/.config/zsh/dotfiles-update.zsh
 STARSHIP_CONFIG=${HOME}/.config/starship.toml
 (( $+commands[starship] )) && eval "$(starship init zsh)"
 
+# MacBook-specific Java and Maven configuration
+if [[ "$(uname -s)" == "Darwin" && "$(hostname -s)" == "hephaistos" ]]; then
+    export JAVA_HOME=$(/usr/libexec/java_home)
+    export MAVEN_HOME=/opt/apache-maven-3.10.1
+    export PATH="$MAVEN_HOME/bin:$PATH"
+fi
+
 alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 alias ip="ip -c"
