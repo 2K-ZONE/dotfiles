@@ -3,6 +3,27 @@ web_client {
     font "JetBrainsMono NF"
 }
 
+terminal {
+    font "JetBrainsMono Nerd Font"
+    font_size 11
+    font_weight "regular"
+
+    line_height 1.0
+    cell_width 1.0
+
+    padding 8
+    padding_balance true
+
+    cursor_style "bar"
+
+    ligatures true
+    system_fonts true
+
+    theme {
+        background "#1e1e2e"
+    }
+}
+
 keybinds clear-defaults=true {
     locked {
         bind "Ctrl g" { SwitchToMode "normal"; }
