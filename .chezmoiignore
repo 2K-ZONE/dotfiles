@@ -3,6 +3,7 @@ README.md
 
 {{ if eq .chezmoi.os "windows" }}
 # Unix-only config
+.vimrc
 .zshrc
 .tmux.conf
 .config/zsh
