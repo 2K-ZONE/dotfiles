@@ -170,5 +170,3 @@ alias ip="ip -c"
 # ---- DOTFILES (chezmoi) ----
 # Source repo: ~/.local/share/chezmoi (plain git repo, `chezmoi cd` to work in it)
 (( $+commands[chezmoi] )) && source <(chezmoi completion zsh)
-
-# chezmoi Test fallen
