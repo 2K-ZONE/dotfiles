@@ -12,4 +12,5 @@ README.md
 # Windows-only config
 AppData
 Documents
+OneDrive
 {{ end }}
