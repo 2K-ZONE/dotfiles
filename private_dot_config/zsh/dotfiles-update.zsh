@@ -1,54 +1,39 @@
-# Weekly `dotfiles pull`, in the spirit of omz auto update.
+# Weekly dotfiles update via chezmoi, in the spirit of omz auto update.
 #
 # Settings (set before sourcing):
 #   zstyle ':dotfiles-update' mode prompt     # prompt | auto | disabled
 #   zstyle ':dotfiles-update' frequency 7     # days between checks
 # Only fast-forwards are pulled; a diverged repo is reported, not merged.
+# After pulling, `chezmoi apply` writes the changes to $HOME. It asks before
+# overwriting a file you changed locally since its last apply.
 # Run `dotfiles-update` to check right now.
 
 _dotfiles_update_stamp=${XDG_CACHE_HOME:-$HOME/.cache}/dotfiles-update.stamp
 
-_dotfiles_git() {
-    git --git-dir=$HOME/.dotfiles --work-tree=$HOME "$@"
-}
-
 dotfiles-update() {
-    local mode=$1 behind ahead
+    local mode=$1 src behind ahead
     [[ -n $mode ]] || zstyle -s ':dotfiles-update' mode mode || mode=prompt
-    [[ -d $HOME/.dotfiles ]] || return 0
-
-    # A bare clone has no fetch refspec, so fetch would create no origin/*.
-    _dotfiles_git config --get remote.origin.fetch >/dev/null ||
-        _dotfiles_git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+    (( $+commands[chezmoi] )) || return 0
+    src=$(chezmoi source-path 2>/dev/null) && [[ -d $src/.git ]] || return 0
 
     # BatchMode: never hang the shell start-up on a passphrase or host key prompt.
     GIT_SSH_COMMAND="ssh -o BatchMode=yes -o ConnectTimeout=5" \
-        _dotfiles_git fetch --quiet 2>/dev/null || {
+        git -C $src fetch --quiet 2>/dev/null || {
         print -u2 "[dotfiles] fetch failed, skipping"
         return 1
     }
 
-    # ...and its branch has no upstream either.
-    if ! _dotfiles_git rev-parse -q --verify @{upstream} >/dev/null 2>&1; then
-        local branch=$(_dotfiles_git symbolic-ref -q --short HEAD)
-        _dotfiles_git branch -q -u origin/$branch $branch 2>/dev/null || {
-            print -u2 "[dotfiles] no upstream for '$branch', skipping"
-            return 1
-        }
-        print "[dotfiles] Set upstream of '$branch' to origin/$branch"
-    fi
-
-    behind=$(_dotfiles_git rev-list --count HEAD..@{upstream} 2>/dev/null) || return 1
-    ahead=$(_dotfiles_git rev-list --count @{upstream}..HEAD 2>/dev/null) || return 1
+    behind=$(git -C $src rev-list --count HEAD..@{upstream} 2>/dev/null) || return 1
+    ahead=$(git -C $src rev-list --count @{upstream}..HEAD 2>/dev/null) || return 1
     (( behind )) || return 0
 
     if (( ahead )); then
-        print -u2 "[dotfiles] diverged ($ahead local, $behind remote commits), pull manually"
+        print -u2 "[dotfiles] diverged ($ahead local, $behind remote commits), pull manually in 'chezmoi cd'"
         return 1
     fi
 
     if [[ $mode == prompt ]]; then
-        print -n "[dotfiles] $behind new commit(s). Pull now? [Y/n] "
+        print -n "[dotfiles] $behind new commit(s). Update now? [Y/n] "
         read -r -k 1 REPLY
         [[ $REPLY == $'\n' ]] || print
         [[ $REPLY == [nN] ]] && return 0
@@ -56,14 +41,20 @@ dotfiles-update() {
         print "[dotfiles] Pulling $behind new commit(s)"
     fi
 
-    local old=$(_dotfiles_git rev-parse HEAD)
-    if _dotfiles_git pull --ff-only --quiet; then
+    local old=$(git -C $src rev-parse HEAD)
+    if git -C $src pull --ff-only --quiet; then
         # Like omz after an update: what came in, without a pager.
-        _dotfiles_git --no-pager log --oneline $old..HEAD
-        _dotfiles_git --no-pager diff --stat $old HEAD
-        print "[dotfiles] Updated, run 'exec zsh' to load changed shell config"
+        git -C $src --no-pager log --oneline $old..HEAD
+        git -C $src --no-pager diff --stat $old HEAD
     else
         print -u2 "[dotfiles] Pull failed"
+        return 1
+    fi
+
+    if chezmoi apply; then
+        print "[dotfiles] Updated, run 'exec zsh' to load changed shell config"
+    else
+        print -u2 "[dotfiles] chezmoi apply failed, see 'chezmoi diff'"
         return 1
     fi
 }

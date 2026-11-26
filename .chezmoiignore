@@ -1,0 +1,14 @@
+# Target paths (relative to $HOME) that chezmoi must not create.
+README.md
+
+{{ if eq .chezmoi.os "windows" }}
+# Unix-only config
+.zshrc
+.tmux.conf
+.config/zsh
+.config/kitty
+{{ else }}
+# Windows-only config
+AppData
+Documents
+{{ end }}

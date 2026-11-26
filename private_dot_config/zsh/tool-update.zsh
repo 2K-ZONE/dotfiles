@@ -1,4 +1,4 @@
-# Weekly update check for starship and zellij, in the spirit of omz auto update.
+# Weekly update check for starship, zellij and chezmoi, in the spirit of omz auto update.
 #
 # Settings (set before sourcing):
 #   zstyle ':tool-update' mode prompt     # prompt | auto | disabled
@@ -24,6 +24,15 @@ _tool_update_latest() {
         "https://github.com/$1/releases/latest") || return 1
     [[ $url == */tag/* ]] || return 1
     print -r -- ${${url##*/}#v}
+}
+
+# Version number from `<tool> --version`, without "v" or trailing comma.
+_tool_update_version() {
+    local w
+    for w in ${(z)"$($1 --version 2>/dev/null)"}; do
+        w=${${w#v}%,}
+        [[ $w == <->.<->* ]] && { print -r -- $w; return }
+    done
 }
 
 # Run a command with sudo if the target directory is not writable.
@@ -76,14 +85,56 @@ _tool_update_zellij() {
     }
 }
 
+_tool_update_chezmoi() {
+    local version=$1 bindir=$2 arch os tmp want have
+    case $(uname -m) in
+        x86_64|amd64)  arch=amd64 ;;
+        arm64|aarch64) arch=arm64 ;;
+        armv6l|armv7l) arch=armv6 ;;
+        *) print -u2 "chezmoi: unsupported architecture $(uname -m)"; return 1 ;;
+    esac
+    case $OSTYPE in
+        darwin*) os=darwin ;;
+        linux*)  os=linux; [[ $arch == amd64 ]] && os=linux-musl ;;
+        *) print -u2 "chezmoi: unsupported OS $OSTYPE"; return 1 ;;
+    esac
+
+    local file=chezmoi_${version}_${os}_$arch.tar.gz
+    local base="https://github.com/twpayne/chezmoi/releases/download/v$version"
+    tmp=$(mktemp -d "${TMPDIR:-/tmp}/tool-update.XXXXXX") || return 1
+    {
+        curl -fsSL --max-time 120 -o $tmp/$file $base/$file &&
+        curl -fsSL --max-time 30 -o $tmp/checksums.txt $base/chezmoi_${version}_checksums.txt ||
+            return 1
+
+        # Here the published checksum covers the tarball.
+        want=${${(M)${(f)"$(<$tmp/checksums.txt)"}:#*  $file}%% *}
+        if (( $+commands[sha256sum] )); then
+            have=${${(z)"$(sha256sum $tmp/$file)"}[1]}
+        else
+            have=${${(z)"$(shasum -a 256 $tmp/$file)"}[1]}
+        fi
+        if [[ -z $want || $want != $have ]]; then
+            print -u2 "chezmoi: checksum mismatch, not installing"
+            return 1
+        fi
+
+        tar -xzf $tmp/$file -C $tmp chezmoi || return 1
+        _tool_update_priv $bindir install -m 755 $tmp/chezmoi $bindir/chezmoi
+    } always {
+        rm -rf $tmp
+    }
+}
+
 # $1: prompt | auto | check, $2: set to report tools that are up to date.
 _tool_update_run() {
     local mode=$1 verbose=$2 name repo current latest bindir action
 
-    for name repo in starship starship/starship zellij zellij-org/zellij; do
+    for name repo in starship starship/starship zellij zellij-org/zellij \
+                     chezmoi twpayne/chezmoi; do
         if (( $+commands[$name] )); then
             bindir=${commands[$name]:h}
-            current=${${(z)"$($name --version 2>/dev/null)"}[2]}
+            current=$(_tool_update_version $name)
         else
             zstyle -s ':tool-update' bindir bindir || bindir=/usr/local/bin
             current=

@@ -1,63 +1,39 @@
-# Initial setup (on your first machine)
-```bash
-git init --bare $HOME/.dotfiles
-alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles add ~/.zshrc
-dotfiles commit -m "Initial dotfiles"
-```
+# dotfiles
 
-# Add your config files
-```bash
-dotfiles add ~/.config/kitty/kitty.conf
-dotfiles add ~/.config/starship.toml
-dotfiles add ~/.config/zellij/config.kdl
-dotfiles commit -m "Add config files"
-dotfiles remote add origin git@github.com:2K-ZONE/dotfiles.git
-dotfiles push -u origin main
-```
+Managed with [chezmoi](https://www.chezmoi.io). The source repo lives in
+`~/.local/share/chezmoi` (a normal git repo, not a bare one); chezmoi copies
+the files into `$HOME`. File names in here map to targets:
+`dot_zshrc` → `~/.zshrc`, `dot_config/zellij/config.kdl` → `~/.config/zellij/config.kdl`.
 
-# On a new machine — clone and restore
-```bash
-git clone --bare https://github.com/2K-ZONE/dotfiles.git $HOME/.dotfiles
-alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles checkout
-dotfiles config --local status.showUntrackedFiles no
-```
+## New machine
 
 ```bash
-echo "alias dotfiles='git --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME'" >> ~/.zshrc
+# macOS / Linux: install chezmoi (or let tool-update.zsh do it later)
+sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
+chezmoi init git@github.com:2K-ZONE/dotfiles.git   # https://github.com/2K-ZONE/dotfiles.git without a key
+chezmoi diff     # review what would change in $HOME
+chezmoi apply
 ```
 
-
-
-# Yes! You Can Be Selective
-## Pull Only Specific Files
-
-```bash
-# After cloning the bare repo on a new PC
-git clone --bare https://github.com/2K-ZONE/dotfiles.git $HOME/.dotfiles
-alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles config --local status.showUntrackedFiles no
-```
-```bash
-# Checkout only specific files
-dotfiles checkout -- ~/.config/kitty/kitty.conf
-dotfiles checkout -- ~/.zshrc
+```powershell
+# Windows
+winget install twpayne.chezmoi
+chezmoi init https://github.com/2K-ZONE/dotfiles.git
+chezmoi diff
+chezmoi apply
 ```
 
-# See What's Available
-```bash
-dotfiles ls-tree --name-only -r main
-```
+## Daily use
 
-# Add More Later
-## On any machine
-```bash
-dotfiles checkout -- ~/.config/starship.toml
-```
+| Task | Command |
+|---|---|
+| edit a managed file | `chezmoi edit ~/.zshrc` (applies on save with `--apply`) or edit in place, then `chezmoi re-add` |
+| start managing a file | `chezmoi add ~/.config/foo/bar.conf` |
+| see pending changes to `$HOME` | `chezmoi diff` / `chezmoi status` |
+| commit and push | `chezmoi cd`, then plain `git add/commit/push` (normal completion) |
+| pull and apply | `chezmoi update` (or wait for the weekly `dotfiles-update` check) |
 
+## Per-OS files
 
-
-
-
-
+`.chezmoiignore` is a template: Windows skips the zsh/tmux/kitty config,
+macOS/Linux skip `AppData` and `Documents`.

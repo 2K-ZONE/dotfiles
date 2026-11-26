@@ -148,7 +148,7 @@ zstyle ':tool-update' manual-mode auto
 source ${HOME}/.config/zsh/tool-update.zsh
 
 # ---- DOTFILES UPDATES ----
-# Weekly `dotfiles pull` (fast-forward only), mode: prompt | auto | disabled
+# Weekly `chezmoi update` check, mode: prompt | auto | disabled
 zstyle ':dotfiles-update' mode prompt
 zstyle ':dotfiles-update' frequency 7
 source ${HOME}/.config/zsh/dotfiles-update.zsh
@@ -165,18 +165,9 @@ if [[ "$(uname -s)" == "Darwin" && "$(hostname -s)" == "hephaistos" ]]; then
     export PATH="$MAVEN_HOME/bin:$PATH"
 fi
 
-_dotgit="git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
-alias dotfiles="$_dotgit"
-
 alias ip="ip -c"
 
-alias dadd="$_dotgit add"
-alias dpush="$_dotgit push"
-alias dpull="$_dotgit pull"
-alias dstatus="$_dotgit status"
-alias dcomm="$_dotgit commit -m"
-alias ddiff="$_dotgit diff"
-
-
-alias ip="ip -c"
+# ---- DOTFILES (chezmoi) ----
+# Source repo: ~/.local/share/chezmoi (plain git repo, `chezmoi cd` to work in it)
+(( $+commands[chezmoi] )) && source <(chezmoi completion zsh)
 
