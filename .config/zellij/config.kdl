@@ -21,6 +21,7 @@ terminal {
 
     theme {
         background "#1e1e2e"
+	bright_black "#878580"
     }
 }
 
