@@ -558,3 +558,6 @@ web_client {
 // Note: be sure to escape backslashes and similar characters properly
 // post_command_discovery_hook "echo $RESURRECT_COMMAND | sed <your_regex_here>"
 
+# Windows "Install"
+# Invoke-WebRequest https://raw.githubusercontent.com/2K-ZONE/dotfiles/master/private_dot_config/zellij/config.kdl -OutFile (New-Item -Force "$env:APPDATA\Zellij\config.kdl")
+# Add-Content "$env:APPDATA\Zellij\config.kdl" 'default_shell "powershell.exe"'
