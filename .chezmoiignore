@@ -8,6 +8,7 @@ README.md
 .tmux.conf
 .config/zsh
 .config/kitty
+.config/zellij
 {{ else }}
 # Windows-only config
 AppData
