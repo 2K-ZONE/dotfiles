@@ -319,8 +319,7 @@ web_client {
 // Choose the path to the default shell that zellij will use for opening new panes
 // Default: $SHELL
 // 
-// default_shell "fish"{{ if eq .chezmoi.os "windows" }}
-default_shell "powershell.exe"{{ end }}
+// default_shell "fish"
  
 // Choose the path to override cwd that zellij will use for opening new panes
 // 

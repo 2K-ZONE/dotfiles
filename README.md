@@ -8,18 +8,10 @@ the files into `$HOME`. File names in here map to targets:
 ## New machine
 
 ```bash
-# macOS / Linux: install chezmoi (or let tool-update.zsh do it later)
+# macOS / Linux / WSL: install chezmoi (or let tool-update.zsh do it later)
 sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /usr/local/bin
 chezmoi init git@github.com:2K-ZONE/dotfiles.git   # https://github.com/2K-ZONE/dotfiles.git without a key
 chezmoi diff     # review what would change in $HOME
-chezmoi apply
-```
-
-```powershell
-# Windows
-winget install twpayne.chezmoi
-chezmoi init https://github.com/2K-ZONE/dotfiles.git
-chezmoi diff
 chezmoi apply
 ```
 
@@ -32,8 +24,3 @@ chezmoi apply
 | see pending changes to `$HOME` | `chezmoi diff` / `chezmoi status` |
 | commit and push | `chezmoi cd`, then plain `git add/commit/push` (normal completion) |
 | pull and apply | `chezmoi update` (or wait for the weekly `dotfiles-update` check) |
-
-## Per-OS files
-
-`.chezmoiignore` is a template: Windows skips the zsh/tmux/kitty config,
-macOS/Linux skip `AppData` and `Documents`.
