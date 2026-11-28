@@ -112,3 +112,7 @@ format = "[$symbol([$version](bold dimmed red) )]($style)"
 
 [username]
 format = "[$user]($style)"
+
+
+[os.symbols]
+Windows = "  "
