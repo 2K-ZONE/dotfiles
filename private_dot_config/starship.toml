@@ -112,6 +112,3 @@ format = "[$symbol([$version](bold dimmed red) )]($style)"
 
 [username]
 format = "[$user]($style)"
-
-# Download in Windows:
-# Invoke-WebRequest https://raw.githubusercontent.com/2K-ZONE/dotfiles/master/private_dot_config/starship.toml -OutFile $HOME\.config\starship.toml
